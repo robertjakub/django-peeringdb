@@ -2,7 +2,10 @@
 import datetime
 from django.core.exceptions import ValidationError, ObjectDoesNotExist, FieldDoesNotExist
 from django.db import models
-from django_peeringdb import settings
+from django_peeringdb import (
+    const,
+    settings,
+)
 from decimal import Decimal
 import logging
 
@@ -22,6 +25,9 @@ def sync_obj(cls, row):
             field = None
         if field and isinstance(field, models.DecimalField) and isinstance(v, float):
             setattr(obj, k, Decimal("{:.{prec}f}".format(v, prec=field.decimal_places)))
+        elif field and isinstance(field, models.PositiveIntegerField) and 'prefix' in k:
+            if v > const.MAX_PREFIX:
+                setattr(obj, k, const.MAX_PREFIX)
         else:
             setattr(obj, k, v)
 

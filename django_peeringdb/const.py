@@ -100,3 +100,5 @@ VISIBILITY = (
     ('Users', 'Users'),
     ('Public', 'Public'),
 )
+
+MAX_PREFIX = 1000000 # no one should announce more than 1000000 prefixes
